@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.example.bsu_contest.components.CommentItem
 import com.example.bsu_contest.components.Header
 import com.example.bsu_contest.models.Comment
+import com.example.bsu_contest.models.CommentWithPostTitle
 import com.example.bsu_contest.models.MainApi
 import com.example.bsu_contest.ui.theme.BlueBsu
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -50,73 +51,107 @@ class UserCommentsActivity : ComponentActivity() {
         val pref = getSharedPreferences("TABLE", Context.MODE_PRIVATE)
         val token = pref.getString("Bearer-Token", "")!!
 
-        setContent {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = Color.White)
-            ) {
+        /* Корутина для API */
+        CoroutineScope(Dispatchers.IO).launch() {
+            var user_id: Int = 0
 
-                /* Верхняя строка*/
-                Header(LocalContext.current, pref)
-
-                val isLoadingData = remember { mutableStateOf(false) }
-
-                /* Корутина для запросов репортов из API */
-                val comments = remember { mutableStateListOf<Comment>() }
-                isLoadingData.value = true;
-                LaunchedEffect(CoroutineScope(Dispatchers.IO)) {
-                    comments.addAll(mainApi.getAllCommentsOfUser(token = token).data
-                        /* Чем больше id тем запись новее?
-                        * на старте без фильтра берем */
-                        .sortedByDescending { it.updated_at })
-                    isLoadingData.value = false;
+            if (token != "") {
+                /* ИНАЧЕ НИКАК НЕ ПОЛУЧИТЬ id ПОЛЬЗОВАТЕЛЯ КОТОРЫЙ СЕЙЧАС ЗАЛОГИНЕН */
+                val user_comments = mainApi.getAllCommentsOfUser(token).data
+                if (!user_comments.isEmpty()) {
+                    user_id = user_comments[0].user_id
                 }
+            }
 
-                /* Обновляем свойпом, по хорошему надо делать через модификатор т.к. метод помечен как Deprecated, но у меня не получилось */
-                val refreshing by remember { mutableStateOf(false) }
-                SwipeRefresh(
-                    state = SwipeRefreshState(isRefreshing = refreshing),
-                    onRefresh = {
-                        CoroutineScope(Dispatchers.IO).launch() {
-                            comments.clear()
-                            comments.addAll(mainApi.getAllCommentsOfUser(token = token).data.sortedByDescending { it.updated_at })
-                        }
-                    }) {
-
-                    Box(
+            runOnUiThread {
+                setContent {
+                    Column(
                         modifier = Modifier
                             .fillMaxSize()
+                            .background(color = Color.White)
                     ) {
 
-                        /* Добавляем репорты */
-                        LazyColumn(
-                            Modifier.fillMaxSize()
-                        ) {
-                            itemsIndexed(
-                                items = comments
-                            ) { index, item ->
-                                CommentItem(
-                                    context = LocalContext.current,
-                                    mainApi = mainApi,
-                                    token = token,
-                                    user_id = 50,
-                                    comment = item,
-                                    comments = comments)
-                            }
-                        }
-                    }
+                        /* Верхняя строка*/
+                        Header(LocalContext.current, pref)
 
-                    if (isLoadingData.value) {
-                        Box(
-                            Modifier
-                                .fillMaxSize()
-                                .background(color = Color.White),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator(
-                                color = BlueBsu
-                            )
+                        val isLoadingData = remember { mutableStateOf(false) }
+
+                        /* Корутина для запросов репортов из API */
+                        val comments = remember { mutableStateListOf<Comment>() }
+                        val commentsWithTitle = remember { mutableStateListOf<CommentWithPostTitle>() }
+                        isLoadingData.value = true;
+                        LaunchedEffect(CoroutineScope(Dispatchers.IO)) {
+                            Thread.sleep(2000)
+                            comments.addAll(mainApi.getAllCommentsOfUser(token = token).data.sortedByDescending { it.updated_at })
+                            for(i in comments){
+                                Thread.sleep( 400)
+                                val title = mainApi.getReportById(i.report_id).data.title
+
+                                commentsWithTitle.add(CommentWithPostTitle(i, title))
+                            }
+
+                            isLoadingData.value = false;
+                        }
+
+                        /* Обновляем свойпом, по хорошему надо делать через модификатор т.к. метод помечен как Deprecated, но у меня не получилось */
+                        val refreshing by remember { mutableStateOf(false) }
+                        SwipeRefresh(
+                            state = SwipeRefreshState(isRefreshing = refreshing),
+                            onRefresh = {
+                                isLoadingData.value = true;
+                                CoroutineScope(Dispatchers.IO).launch() {
+                                    Thread.sleep(2000)
+                                    commentsWithTitle.clear()
+
+                                    val temp = mainApi.getAllCommentsOfUser(token = token).data.sortedByDescending { it.updated_at }
+                                    for(i in temp){
+                                        Thread.sleep( 100)
+                                        val title = mainApi.getReportById(i.report_id).data.title
+
+                                        commentsWithTitle.add(CommentWithPostTitle(i, title))
+                                    }
+
+                                    isLoadingData.value = false;
+                                }
+                            }) {
+
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                            ) {
+
+                                /* Добавляем репорты */
+                                LazyColumn(
+                                    Modifier.fillMaxSize()
+                                ) {
+                                    itemsIndexed(
+                                        items = commentsWithTitle
+                                    ) { index, item ->
+                                        CommentItem(
+                                            context = LocalContext.current,
+                                            mainApi = mainApi,
+                                            token = token,
+                                            user_id = user_id,
+                                            comment = item.comment,
+                                            comments = comments,
+                                            commentTitle = item.title
+                                        )
+                                    }
+                                }
+                            }
+
+                            if (isLoadingData.value) {
+                                Box(
+                                    Modifier
+                                        .fillMaxSize()
+                                        .background(color = Color.White),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator(
+                                        color = BlueBsu
+                                    )
+                                }
+                            }
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-#Tue May 21 16:08:17 IRKT 2024
+#Tue May 21 17:33:05 IRKT 2024
 base.0=D\:\\AndroidStudioProjects\\BSU_Contest\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=D\:\\AndroidStudioProjects\\BSU_Contest\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
 base.2=D\:\\AndroidStudioProjects\\BSU_Contest\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\10\\classes.dex

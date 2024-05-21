@@ -288,7 +288,7 @@ fun LoginScreen(context:Context, pref : SharedPreferences? = null){
             /* Крутим колесо пока сервер возвращает токен */
             if(showProgressCirle.value){
                 Dialog(onDismissRequest = { /*showProgressCirle.value = false*/ }) {
-                    CircularProgressIndicator( color = BlueBsu)
+                    CircularProgressIndicator(color = BlueBsu)
                 }
             }
         }

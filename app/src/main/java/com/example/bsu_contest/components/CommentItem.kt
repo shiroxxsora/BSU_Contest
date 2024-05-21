@@ -44,15 +44,18 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Date
+import java.util.Random
+import kotlin.math.abs
 
 @Composable
 fun CommentItem(
-    context: Context,
+    context: Context? = null,
     mainApi: MainApi,
     token: String,
     user_id: Int = 0,
     comment: Comment,
     comments: SnapshotStateList<Comment>,
+    commentTitle: String ="",
 ){
 
     val deletePopUp = remember { mutableStateOf(false)}
@@ -95,6 +98,31 @@ fun CommentItem(
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp
                 )
+            }
+        }
+        if(context != null){
+            if(context?.toString()?.contains("UserCommentsActivity")!!){
+
+                /* Корутина для API */
+                /*val reportTitle = remember {mutableStateOf("")}
+                CoroutineScope(Dispatchers.IO).launch() {
+                    Thread.sleep( 400 + (abs(Random().nextLong()) % 2000))
+                    reportTitle.value = mainApi.getReportById(comment.report_id).data.title
+                }*/
+
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(30.dp)
+                    .background(color = Color.Black),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        color = Color.White,
+                        text = commentTitle,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp
+                    )
+                }
             }
         }
 
