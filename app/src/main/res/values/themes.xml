@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.BSU_Contest" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.BSU_Contest.NoActionBar">
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.BSU_Contest.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.BSU_Contest.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>
