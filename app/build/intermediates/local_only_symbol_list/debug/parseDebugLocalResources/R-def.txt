@@ -10,9 +10,11 @@ color teal_200
 color teal_700
 color white
 drawable ic_delete
+drawable ic_edit
 drawable ic_filter
 drawable ic_launcher_background
 drawable ic_launcher_foreground
+drawable ic_menu
 drawable ic_noimage
 drawable img
 drawable logo_intro
@@ -20,7 +22,6 @@ drawable pointer
 drawable pointer0_25x
 drawable pointer0_5x
 drawable pointer0_75x
-id composeView
 id main
 id mapview
 layout activity_report_screen

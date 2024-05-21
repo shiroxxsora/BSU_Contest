@@ -74,6 +74,16 @@ class MainActivity : ComponentActivity() {
         val mainApi = retrofit.create(MainApi::class.java)
 
         setContent {
+
+
+            /*
+            *
+            * Здесь почти все скопировано из MainActivity
+            *
+            * */
+
+
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -161,7 +171,8 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(color = Color.White),
-                            expanded = expandedMenu.value, onDismissRequest = { expandedMenu.value = false }) {
+                            expanded = expandedMenu.value,
+                            onDismissRequest = { expandedMenu.value = false }) {
                             DropdownMenuItem(text = {
                                 Text(
                                     modifier = Modifier

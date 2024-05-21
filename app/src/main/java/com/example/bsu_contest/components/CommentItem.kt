@@ -1,5 +1,6 @@
 package com.example.bsu_contest.components
 
+import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -17,6 +18,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -32,14 +37,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bsu_contest.R
 import com.example.bsu_contest.models.Comment
+import com.example.bsu_contest.models.EditingComment
 import com.example.bsu_contest.models.MainApi
 import com.example.bsu_contest.ui.theme.BlueBsu
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Date
 
 @Composable
 fun CommentItem(
+    context: Context,
     mainApi: MainApi,
     token: String,
     user_id: Int = 0,
@@ -48,6 +56,7 @@ fun CommentItem(
 ){
 
     val deletePopUp = remember { mutableStateOf(false)}
+    val isEditNow = remember { mutableStateOf(false)}
 
     /* Карточка с комментарием */
     Card(
@@ -121,13 +130,103 @@ fun CommentItem(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
 
-                    /* Комментарий */
-                    Text(modifier = Modifier
-                            .fillMaxWidth(),
-                        color = Color.White,
-                        text = comment.content,
-                        fontSize = 18.sp
-                    )
+                    if(!isEditNow.value){
+                        /* Комментарий */
+                        Text(modifier = Modifier
+                                .fillMaxWidth(),
+                            color = Color.White,
+                            text = comment.content,
+                            fontSize = 18.sp
+                        )
+                    }else {
+
+                        val newCommentContent = remember { mutableStateOf(comment.content) }
+                        Column() {
+                            /* Текстовое поле для редактирования */
+                            OutlinedTextField(
+                                modifier = Modifier
+                                    .fillMaxWidth(.9f)
+                                    .height(140.dp),
+                                value = newCommentContent.value,
+                                onValueChange = { newCommentContent.value = it },
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    unfocusedTextColor = Color.White,
+                                    focusedTextColor = Color.White,
+                                    focusedBorderColor = BlueBsu,
+                                    cursorColor = BlueBsu
+                                ))
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+
+                            ) {
+                                val private = remember { mutableStateOf(comment.status) }
+                                val isChecked = remember { mutableStateOf(comment.status == 2) }
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically
+                                ){
+                                    /* Чек бокс чтобы проверить приватный коммент или нет */
+                                    Checkbox(
+                                        colors = CheckboxDefaults.colors(
+                                            checkedColor = BlueBsu,
+                                            uncheckedColor = BlueBsu,
+                                            checkmarkColor = Color.White
+                                        ),
+                                        checked = isChecked.value,
+                                        onCheckedChange = {
+                                            isChecked.value = !isChecked.value
+                                            if (private.value == 1) {
+                                                private.value = 2
+                                            } else {
+                                                private.value = 1
+                                            }
+                                            println(private.value)
+                                        },
+                                    )
+                                    Text(
+                                        color = BlueBsu,
+                                        text = "Приватный",
+                                        fontSize = 18.sp
+                                    )
+                                }
+
+                                Button(
+                                    colors = ButtonDefaults.buttonColors(containerColor = BlueBsu),
+                                    onClick = {
+                                        comments.remove(comment)
+
+                                        /* Редактируем комментарий на сервере */
+                                        CoroutineScope(Dispatchers.IO).launch() {
+                                            val sendComment = EditingComment(
+                                                comment_id = comment.id,
+                                                content = newCommentContent.value,
+                                                status = private.value,
+                                            )
+                                            mainApi.editComment(token = token, comment = sendComment)
+
+                                            isEditNow.value = false
+                                            /* Обновляем коммент на экране */
+                                            comments.add(Comment(
+                                                id = comment.id,
+                                                created_at = comment.created_at,
+                                                updated_at = Date(),
+                                                user_id = comment.user_id,
+                                                content = newCommentContent.value,
+                                                status = private.value,
+                                                report_id = comment.report_id,
+                                                author = comment.author
+                                            ))
+                                        }
+                                    }) {
+                                    Text(text = "Обновить")
+                                }
+                            }
+                        }
+                    }
                 }
 
                 Row(
@@ -166,9 +265,16 @@ fun CommentItem(
                             modifier = Modifier
                                 .width(25.dp)
                                 .clickable {
+                                    isEditNow.value = !isEditNow.value
+                                },
+                            painter = painterResource(id = R.drawable.ic_edit), contentDescription = "Edit icon")
+
+                        Image(
+                            modifier = Modifier
+                                .width(25.dp)
+                                .clickable {
                                     deletePopUp.value = true
-                                }
-                            ,
+                                },
                             painter = painterResource(id = R.drawable.ic_delete), contentDescription = "Delete icon")
                     }
                 }

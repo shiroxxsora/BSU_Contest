@@ -49,6 +49,7 @@ class ReportActivity : ComponentActivity() {
                     Column {
                         Header(LocalContext.current, getSharedPreferences("TABLE", MODE_PRIVATE))
                         ReportScreen(
+                            context = LocalContext.current,
                             user_id = user_id,
                             report = report,
                             mainApi = mainApi,

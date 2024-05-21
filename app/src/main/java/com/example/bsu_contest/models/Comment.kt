@@ -12,3 +12,16 @@ data class Comment(
     val report_id: Int,
     val author: Author
 )
+
+data class SendingComment(
+    val content: String,
+    val status: Int,
+    val report_id: Int,
+)
+
+data class EditingComment(
+    val comment_id: Int,
+    val content: String,
+    val status: Int,
+)
+

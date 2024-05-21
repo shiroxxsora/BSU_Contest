@@ -16,7 +16,7 @@ interface MainApi {
 
     @Headers("Content-Type: application/json")
     @GET("reports/get/all")
-    suspend fun getAllReportsOfUser(@Header("Authorization") token: String)
+    suspend fun getAllReportsOfUser(@Header("Authorization") token: String): ReportDataList
 
     @Headers("Content-Type: application/json")
     @PUT("reports/add")
@@ -39,4 +39,8 @@ interface MainApi {
     @Headers("Content-Type: application/json")
     @PUT("comments/add")
     suspend fun addComment(@Header("Authorization") token: String, @Body comment:SendingComment): CommentData
+
+    @Headers("Content-Type: application/json")
+    @PUT("comments/edit")
+    suspend fun editComment(@Header("Authorization") token: String, @Body comment:EditingComment)
 }

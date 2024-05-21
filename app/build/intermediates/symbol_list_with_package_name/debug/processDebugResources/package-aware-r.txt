@@ -3019,6 +3019,7 @@ drawable ic_call_decline_low
 drawable ic_clear_black_24
 drawable ic_clock_black_24dp
 drawable ic_delete
+drawable ic_edit
 drawable ic_filter
 drawable ic_keyboard_black_24dp
 drawable ic_launcher_background
@@ -3026,6 +3027,7 @@ drawable ic_launcher_foreground
 drawable ic_m3_chip_check
 drawable ic_m3_chip_checked_circle
 drawable ic_m3_chip_close
+drawable ic_menu
 drawable ic_mtrl_checked_circle
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
@@ -3239,7 +3241,6 @@ id clockwise
 id closest
 id coil_request_manager
 id collapseActionView
-id composeView
 id compose_view_saveable_id_tag
 id compress
 id confirm_button

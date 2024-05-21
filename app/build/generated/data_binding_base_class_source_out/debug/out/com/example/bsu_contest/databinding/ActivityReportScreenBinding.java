@@ -4,10 +4,9 @@ package com.example.bsu_contest.databinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
+import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.compose.ui.platform.ComposeView;
 import androidx.viewbinding.ViewBinding;
 import androidx.viewbinding.ViewBindings;
 import com.example.bsu_contest.R;
@@ -18,28 +17,24 @@ import java.lang.String;
 
 public final class ActivityReportScreenBinding implements ViewBinding {
   @NonNull
-  private final ScrollView rootView;
+  private final RelativeLayout rootView;
 
   @NonNull
-  public final ComposeView composeView;
-
-  @NonNull
-  public final ScrollView main;
+  public final RelativeLayout main;
 
   @NonNull
   public final MapView mapview;
 
-  private ActivityReportScreenBinding(@NonNull ScrollView rootView,
-      @NonNull ComposeView composeView, @NonNull ScrollView main, @NonNull MapView mapview) {
+  private ActivityReportScreenBinding(@NonNull RelativeLayout rootView,
+      @NonNull RelativeLayout main, @NonNull MapView mapview) {
     this.rootView = rootView;
-    this.composeView = composeView;
     this.main = main;
     this.mapview = mapview;
   }
 
   @Override
   @NonNull
-  public ScrollView getRoot() {
+  public RelativeLayout getRoot() {
     return rootView;
   }
 
@@ -64,13 +59,7 @@ public final class ActivityReportScreenBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
-      id = R.id.composeView;
-      ComposeView composeView = ViewBindings.findChildViewById(rootView, id);
-      if (composeView == null) {
-        break missingId;
-      }
-
-      ScrollView main = (ScrollView) rootView;
+      RelativeLayout main = (RelativeLayout) rootView;
 
       id = R.id.mapview;
       MapView mapview = ViewBindings.findChildViewById(rootView, id);
@@ -78,7 +67,7 @@ public final class ActivityReportScreenBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityReportScreenBinding((ScrollView) rootView, composeView, main, mapview);
+      return new ActivityReportScreenBinding((RelativeLayout) rootView, main, mapview);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

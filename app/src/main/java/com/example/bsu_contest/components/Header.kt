@@ -13,8 +13,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,11 +29,17 @@ import androidx.core.content.ContextCompat.startActivity
 import com.example.bsu_contest.LoginActivity
 import com.example.bsu_contest.MainActivity
 import com.example.bsu_contest.R
+import com.example.bsu_contest.UserCommentsActivity
+import com.example.bsu_contest.UserReportsActivity
 import com.example.bsu_contest.ui.theme.BlueBsu
 
 @Composable
-fun Header(context: Context, pref: SharedPreferences?=null){
+fun Header(
+    context: Context,
+    pref: SharedPreferences?=null
+    ){
     val loginIntent = Intent(context, LoginActivity::class.java)
+
     Column {
         Row(
             modifier = Modifier
@@ -66,25 +76,149 @@ fun Header(context: Context, pref: SharedPreferences?=null){
                 }
             }
             else{
-
+                val expandedMenu = remember { mutableStateOf(false) }
+                print(context.toString())
                 Button(
+                    modifier = Modifier
+                        .fillMaxWidth(.6f)
+                        .padding(horizontal = 0.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = BlueBsu),
-                    onClick = {
-                        //startActivity(loginIntent)
-                    }) {
-                    Text(text = "Личный кабинет")
+                    onClick = { expandedMenu.value = !expandedMenu.value }
+                ) {
+                    Text(text = "Меню")
+
+                    /* Выпадающее меню */
+                    DropdownMenu(
+                        modifier = Modifier
+                            .fillMaxWidth(.6f)
+                            .background(color = Color.White),
+                        expanded = expandedMenu.value,
+                        onDismissRequest = { expandedMenu.value = false }) {
+
+                        /* Кнопка главная */
+                        DropdownMenuItem(
+                            modifier = Modifier
+                                .background(
+                                    color =
+                                    if(context.toString().contains("MainActivity")) {
+                                        BlueBsu
+                                    }
+                                    else{
+                                        Color.White
+                                    }
+                                ),
+                            text = {
+                                Text(
+                                    modifier = Modifier
+                                        .padding(horizontal = 5.dp)
+                                    /*.background(color = Color.White)*/,
+                                    text = "Главная",
+                                    color =
+                                        if(context.toString().contains("MainActivity")) {
+                                            Color.White
+                                        }
+                                        else{
+                                            BlueBsu
+                                        }
+                                    )
+                                },
+                            onClick = {
+                                expandedMenu.value = false
+                                val intent = Intent(context, MainActivity::class.java)
+                                startActivity(context, intent, null)
+                            }
+                        )
+
+                        /* Кнопка мои заявки */
+                        DropdownMenuItem(
+                            modifier = Modifier
+                                .background(
+                                    color =
+                                        if(context.toString().contains("UserReportsActivity")) {
+                                            BlueBsu
+                                        }
+                                        else{
+                                            Color.White
+                                        }
+                                ),
+                            text = {
+                                Text(
+                                    modifier = Modifier
+                                        .padding(horizontal = 5.dp)
+                                    /*.background(color = Color.White)*/,
+                                    text = "Мои завявки",
+                                    color =
+                                        if(context.toString().contains("UserReportsActivity")) {
+                                            Color.White
+                                        }
+                                        else{
+                                            BlueBsu
+                                        }
+                                    )
+                               },
+                            onClick = {
+                                expandedMenu.value = false
+                                val intent = Intent(context, UserReportsActivity::class.java)
+                                startActivity(context, intent, null)
+                            }
+                        )
+
+                        /* Кнопка мои комментарии*/
+                        DropdownMenuItem(
+                            modifier = Modifier
+                                .background(
+                                    color =
+                                    if(context.toString().contains("UserCommentsActivity")) {
+                                        BlueBsu
+                                    }
+                                    else{
+                                        Color.White
+                                    }
+                                ),
+                            text = {
+                                Text(
+                                    modifier = Modifier
+                                        .padding(horizontal = 5.dp)
+                                    /*.background(color = Color.White)*/,
+                                    text = "Мои комментарии",
+                                    color =
+                                        if(context.toString().contains("UserCommentsActivity")) {
+                                            Color.White
+                                        }
+                                        else{
+                                            BlueBsu
+                                        }
+                                    )
+                                },
+                            onClick = {
+                                expandedMenu.value = false
+                                val intent = Intent(context, UserCommentsActivity::class.java)
+                                startActivity(context, intent, null)
+                            }
+                        )
+
+                        /* Кнопка выйти */
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    modifier = Modifier
+                                        .padding(horizontal = 5.dp)
+                                        .background(color = Color.White)
+                                    /*.background(color = Color.White)*/,
+                                    text = "Выйти из аккаунта",
+                                    color =BlueBsu
+                                )
+                            },
+                            onClick = {
+                                expandedMenu.value = false
+                                pref?.edit()?.putString("Bearer-Token", "")?.apply()
+                                val intent = Intent(context, MainActivity::class.java)
+                                startActivity(context, intent, null)
+                            }
+                        )
+                    }
                 }
 
-                /* TODO: Удалить */
-                val intent = Intent(context, MainActivity::class.java)
-                Button(
-                    colors = ButtonDefaults.buttonColors(containerColor = BlueBsu),
-                    onClick = {
-                        pref?.edit()?.putString("Bearer-Token","")?.apply()
-                        startActivity(context, intent, null)
-                    }) {
-                    Text(text = "CLR")
-                }
             }
         }
     }

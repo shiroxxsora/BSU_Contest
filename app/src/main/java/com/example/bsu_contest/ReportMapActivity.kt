@@ -1,7 +1,9 @@
 package com.example.bsu_contest
 
+import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.core.app.ActivityCompat
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
@@ -29,7 +31,7 @@ class ReportMapActivity : ComponentActivity() {
                     intent.extras?.getDouble("latitude")!!,
                     intent.extras?.getDouble("longitude")!!
                 ),
-                /* zoom = */ 14.0f,
+                /* zoom = */ 17.0f,
                 /* azimuth = */ 0.0f,
                 /* tilt = */ 30.0f
             )
@@ -44,6 +46,12 @@ class ReportMapActivity : ComponentActivity() {
             )
             setIcon(imageProvider)
         }
+
+        /* Попытка отобразить местоположение пользователя */
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),0)
+        var mapKit = MapKitFactory.getInstance()
+        var locationMapKit = mapKit.createUserLocationLayer(mapView.mapWindow)
+        locationMapKit.isVisible = true
     }
 
     override fun onStart() {

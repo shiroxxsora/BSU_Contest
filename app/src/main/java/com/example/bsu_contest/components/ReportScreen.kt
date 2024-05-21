@@ -1,7 +1,10 @@
 package com.example.bsu_contest.components
 
+import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +21,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,11 +32,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import coil.compose.AsyncImage
 import com.example.bsu_contest.R
+import com.example.bsu_contest.ReportMapActivity
 import com.example.bsu_contest.models.Comment
 import com.example.bsu_contest.models.MainApi
 import com.example.bsu_contest.models.Report
@@ -44,6 +51,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ReportScreen(
+    context: Context,
     user_id: Int,
     report: Report,
     mainApi: MainApi,
@@ -165,7 +173,13 @@ fun ReportScreen(
                 AsyncImage(
                     modifier = Modifier
                         .width(400.dp)
-                        .height(400.dp),
+                        .height(400.dp)
+                        .clickable {
+                            val intent = Intent(context, ReportMapActivity::class.java)
+                            intent.putExtra("latitude", report.latitude)
+                            intent.putExtra("longitude", report.longitude)
+                            startActivity(context, intent, null)
+                        },
                     model = url,
                     contentDescription = "Map image",
                     error = painterResource(id = R.drawable.ic_noimage)
@@ -176,7 +190,6 @@ fun ReportScreen(
         /* Если залогинен то покажем блок "добавить комментарий" */
         if (token != ""){
             item {
-
                 Column(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 20.dp),
@@ -192,15 +205,19 @@ fun ReportScreen(
                         fontSize = 18.sp,
                     color = BlueBsu)*/
 
-                    val comment_content = remember { mutableStateOf("") }
+                    val commentContent = remember { mutableStateOf("") }
 
                     /* Текстовое поле для комментария */
                     OutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth(.9f)
-                            .height(180.dp),
-                        value = comment_content.value,
-                        onValueChange = { comment_content.value = it })
+                            .height(140.dp),
+                        value = commentContent.value,
+                        onValueChange = { commentContent.value = it },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = BlueBsu,
+                            cursorColor = BlueBsu
+                        ))
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -210,30 +227,35 @@ fun ReportScreen(
 
                     ){
                         val private = remember { mutableStateOf(1) }
-                        val isChaked = remember { mutableStateOf(false) }
+                        val isChecked = remember { mutableStateOf(false) }
 
-                        /* Чек бокс чтобы проверить приватный коммент или нет */
-                        Checkbox(
-                            colors = CheckboxDefaults.colors(
-                                checkedColor = BlueBsu,
-                                uncheckedColor = BlueBsu,
-                                checkmarkColor = Color.White
-                            ),
-                            checked = isChaked.value, onCheckedChange = {
-                                isChaked.value = !isChaked.value
-                                if (private.value == 1) {
-                                    private.value = 2
-                                } else {
-                                    private.value = 1
-                                }
-                                println(private.value)
-                            },)
-                        Text(
-                            color = BlueBsu,
-                            text = "Приватный",
-                            fontSize = 18.sp
-                        )
-
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            /* Чек бокс чтобы проверить приватный коммент или нет */
+                            Checkbox(
+                                colors = CheckboxDefaults.colors(
+                                    checkedColor = BlueBsu,
+                                    uncheckedColor = BlueBsu,
+                                    checkmarkColor = Color.White
+                                ),
+                                checked = isChecked.value,
+                                onCheckedChange = {
+                                    isChecked.value = !isChecked.value
+                                    if (private.value == 1) {
+                                        private.value = 2
+                                    } else {
+                                        private.value = 1
+                                    }
+                                    println(private.value)
+                                },
+                            )
+                            Text(
+                                color = BlueBsu,
+                                text = "Приватный",
+                                fontSize = 18.sp
+                            )
+                        }
                         Button(
                             colors = ButtonDefaults.buttonColors(containerColor = BlueBsu),
                             onClick = {
@@ -242,7 +264,7 @@ fun ReportScreen(
                                 /* Отправляем комментарий на сервер */
                                 CoroutineScope(Dispatchers.IO).launch() {
                                     val comment = SendingComment(
-                                        content = comment_content.value,
+                                        content = commentContent.value,
                                         status = private.value,
                                         report_id = report.id
                                     )
@@ -251,8 +273,8 @@ fun ReportScreen(
                                     comments.add(result.data)
 
                                     /* Сбрасываем все что написано в формочке комментария */
-                                    comment_content.value = ""
-                                    isChaked.value = false
+                                    commentContent.value = ""
+                                    isChecked.value = false
 
                                     isLoadingData.value = false
                                 }
@@ -282,11 +304,12 @@ fun ReportScreen(
             items = comments
         ) { index, item ->
             CommentItem(
+                context = LocalContext.current,
                 mainApi = mainApi,
                 token = token,
                 user_id = user_id,
                 comment = item,
-                comments
+                comments = comments
             )
         }
     }

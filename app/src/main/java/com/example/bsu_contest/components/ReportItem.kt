@@ -25,11 +25,8 @@ import androidx.core.content.ContextCompat.startActivity
 import coil.compose.AsyncImage
 import com.example.bsu_contest.R
 import com.example.bsu_contest.ReportActivity
-import com.example.bsu_contest.models.Author
 import com.example.bsu_contest.models.Report
-import com.example.bsu_contest.models.ReportType
 import com.example.bsu_contest.ui.theme.BlueBsu
-import java.util.Date
 
 
 //@Preview
@@ -38,12 +35,7 @@ fun ReportItem(
 
     /* Context для перехода на другой экран */
     context:Context,
-    report: Report =
-
-    /* Тестовые данные для Preview */
-        Report(0,"some big test title some big test title some big test title", "test","test",0.0,0.0,"img_1.jpg",
-            Author("test","test",0,"test","test","test", Date()),
-            ReportType(0,Date(),Date(),"test","test","test",))
+    report: Report
 ){
 
     /* Карточка с заявкой */
