@@ -96,8 +96,8 @@
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.6\\com.example.bsu_contest.app-main-70:\\mipmap-xxhdpi\\ic_launcher.webp"
     },
     {
-        "merged": "com.example.bsu_contest.app-debug-68:/drawable_ic_menu.png.flat",
-        "source": "com.example.bsu_contest.app-main-70:/drawable/ic_menu.png"
+        "merged": "com.example.bsu_contest.app-debug-68:/drawable_avatar.png.flat",
+        "source": "com.example.bsu_contest.app-main-70:/drawable/avatar.png"
     },
     {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.6\\com.example.bsu_contest.app-debug-68:\\mipmap-hdpi_ic_launcher_foreground.webp.flat",
@@ -114,6 +114,10 @@
     {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.6\\com.example.bsu_contest.app-debug-68:\\drawable_pointer.png.flat",
         "source": "C:\\Users\\user\\.gradle\\daemon\\8.6\\com.example.bsu_contest.app-main-70:\\drawable\\pointer.png"
+    },
+    {
+        "merged": "C:\\Users\\user\\.gradle\\daemon\\8.6\\com.example.bsu_contest.app-debug-68:\\drawable_ic_menu.png.flat",
+        "source": "C:\\Users\\user\\.gradle\\daemon\\8.6\\com.example.bsu_contest.app-main-70:\\drawable\\ic_menu.png"
     },
     {
         "merged": "C:\\Users\\user\\.gradle\\daemon\\8.6\\com.example.bsu_contest.app-debug-68:\\drawable_ic_delete.png.flat",

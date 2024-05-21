@@ -79,6 +79,11 @@
             android:theme="@style/Theme.BSU_Contest" >
         </activity>
         <activity
+            android:name="com.example.bsu_contest.AddReportActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BSU_Contest" >
+        </activity>
+        <activity
             android:name="androidx.activity.ComponentActivity"
             android:exported="true" />
         <activity

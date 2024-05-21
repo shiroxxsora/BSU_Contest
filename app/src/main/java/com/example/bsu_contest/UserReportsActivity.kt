@@ -1,6 +1,7 @@
 package com.example.bsu_contest
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -33,7 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.bsu_contest.components.Header
-import com.example.bsu_contest.components.UserReportItem
+import com.example.bsu_contest.components.ReportItem
 import com.example.bsu_contest.models.MainApi
 import com.example.bsu_contest.models.Report
 import com.example.bsu_contest.ui.theme.BlueBsu
@@ -63,6 +64,16 @@ class UserReportsActivity : ComponentActivity() {
         val token = pref.getString("Bearer-Token", "")!!
 
         setContent {
+
+
+            /*
+            *
+            * Здесь почти все скопировано из MainActivity
+            *
+            * */
+
+
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -78,10 +89,7 @@ class UserReportsActivity : ComponentActivity() {
                 val reports = remember { mutableStateListOf<Report>() }
                 isLoadingData.value = true;
                 LaunchedEffect(CoroutineScope(Dispatchers.IO)) {
-                    reports.addAll(mainApi.getAllReportsOfUser(token = token).data
-                        /* Чем больше id тем запись новее?
-                        * на старте без фильтра берем */
-                        .sortedByDescending { it.id })
+                    reports.addAll(mainApi.getAllReportsOfUser(token = token).data.sortedByDescending { it.created_at })
                     isLoadingData.value = false;
                 }
 
@@ -98,14 +106,14 @@ class UserReportsActivity : ComponentActivity() {
                         when (filterState.value) {
                             1 -> mainApi.getAllReportsOfUser(token = token).data
                                 .filter { it.report_type.id == 1 }
-                                .sortedByDescending { it.id }
+                                .sortedByDescending { it.created_at }
 
                             2 -> mainApi.getAllReportsOfUser(token = token).data
                                 .filter { it.report_type.id == 2 }
-                                .sortedByDescending { it.id }
+                                .sortedByDescending { it.created_at }
 
                             else -> mainApi.getAllReportsOfUser(token = token).data
-                                .sortedByDescending { it.id }
+                                .sortedByDescending { it.created_at }
                         }
                     )
                     isLoadingData.value = false
@@ -122,7 +130,7 @@ class UserReportsActivity : ComponentActivity() {
                     /* Кнопка фильтра */
                     TextButton(
                         modifier = Modifier
-                            .fillMaxWidth(.5f)
+                            .fillMaxWidth(.45f)
                             .padding(horizontal = 0.dp),
                         onClick = { expandedMenu.value = !expandedMenu.value }
                     ) {
@@ -205,12 +213,16 @@ class UserReportsActivity : ComponentActivity() {
                             }
                         }
                     }
+                    val context = LocalContext.current
 
                     /* Кнопка добавить заявку */
                     TextButton(
                         modifier = Modifier
-                            .padding(horizontal = 0.dp),
-                        onClick = {  }
+                            .padding(end = 20.dp),
+                        onClick = {
+                            val intent = Intent(context, AddReportActivity::class.java)
+                            startActivity(intent)
+                        }
                     ) {
                         Text(text="Добавить новую заявку", color = BlueBsu)
                     }
@@ -238,7 +250,7 @@ class UserReportsActivity : ComponentActivity() {
                             itemsIndexed(
                                 items = reports
                             ) { index, item ->
-                                UserReportItem(LocalContext.current, item)
+                                ReportItem(context = LocalContext.current, mainApi = mainApi, token = token, report = item, reports = reports)
                             }
                         }
                     }

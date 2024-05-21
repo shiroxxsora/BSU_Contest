@@ -5,9 +5,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -38,6 +40,14 @@ fun UserReportItem(
     report: Report
 ){
 
+
+
+    /*
+    *
+    *
+    *       НЕ ИСПОЛЬЗУЕТСЯ
+    *
+    * */
     /* Карточка с заявкой */
     Card(
         modifier = Modifier
@@ -55,12 +65,12 @@ fun UserReportItem(
     ){
         Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .background(color = BlueBsu)
         ){
             Column(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .padding(20.dp)) {
                 Row(
                     modifier = Modifier
@@ -77,9 +87,9 @@ fun UserReportItem(
                         model = "https://webcomp.bsu.ru/uploads/itbur2024/" + report.img_link,
                         contentDescription = "Report image",
                         modifier = Modifier
-                            .fillMaxWidth(.35f)
+                            .fillMaxWidth(.33f)
                             .height(100.dp)
-                        ,
+                            .padding(end = 10.dp),
                         contentScale = ContentScale.Crop,
 
                         /* Подставляет изображение, если возвращается какая-нибудь ошибка по ссылке в model */
@@ -87,28 +97,15 @@ fun UserReportItem(
                     )
                     Column(
                         modifier = Modifier
-                            .fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceEvenly
                     ) {
 
                         /* Название заявки */
                         Text(
                             color = Color.White,
                             text = report.title,
-                            fontSize = 16.sp
-                        )
-
-                        /* Название заявки */
-                        Text(
-                            color = Color.White,
-                            text = report.location,
-                            fontSize = 16.sp
-                        )
-
-                        /* Название заявки */
-                        Text(
-                            color = Color.White,
-                            text = report.content,
                             fontSize = 16.sp
                         )
                     }

@@ -75,15 +75,6 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
-
-            /*
-            *
-            * Здесь почти все скопировано из MainActivity
-            *
-            * */
-
-
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -99,10 +90,7 @@ class MainActivity : ComponentActivity() {
                 val reports = remember { mutableStateListOf<Report>() }
                 isLoadingData.value = true;
                 LaunchedEffect(CoroutineScope(Dispatchers.IO)) {
-                    reports.addAll(mainApi.getAllReports().data
-                        /* Чем больше id тем запись новее?
-                        * на старте без фильтра берем */
-                        .sortedByDescending { it.id })
+                    reports.addAll(mainApi.getAllReports().data.sortedByDescending { it.created_at })
                     //println(mainApi.getCommentsById(1))
                     isLoadingData.value = false;
                 }
@@ -120,14 +108,14 @@ class MainActivity : ComponentActivity() {
                         when (filterState.value) {
                             1 -> mainApi.getAllReports().data
                                 .filter { it.report_type.id == 1 }
-                                .sortedByDescending { it.id }
+                                .sortedByDescending { it.created_at }
 
                             2 -> mainApi.getAllReports().data
                                 .filter { it.report_type.id == 2 }
-                                .sortedByDescending { it.id }
+                                .sortedByDescending { it.created_at }
 
                             else -> mainApi.getAllReports().data
-                                .sortedByDescending { it.id }
+                                .sortedByDescending { it.created_at }
                         }
                     )
                     isLoadingData.value = false
@@ -136,7 +124,7 @@ class MainActivity : ComponentActivity() {
                 val expandedMenu = remember { mutableStateOf(false) }
                 TextButton(
                     modifier = Modifier
-                        .fillMaxWidth(.6f)
+                        .fillMaxWidth(.45f)
                         .padding(horizontal = 0.dp)
                         .clickable {
                             //expandedMenu.value = !expandedMenu.value
@@ -246,7 +234,7 @@ class MainActivity : ComponentActivity() {
                             itemsIndexed(
                                 items = reports
                             ) { index, item ->
-                                ReportItem(LocalContext.current, item)
+                                ReportItem(context = LocalContext.current, report = item)
                             }
                         }
                     }

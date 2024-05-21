@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:2:1-62:12
-INJECTED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:2:1-62:12
-INJECTED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:2:1-62:12
-INJECTED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:2:1-62:12
+ADDED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:2:1-67:12
+INJECTED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:2:1-67:12
+INJECTED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:2:1-67:12
+INJECTED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:2:1-67:12
 MERGED from [androidx.databinding:viewbinding:8.4.0] C:\Users\user\.gradle\caches\transforms-4\b38271c6bab55ea678539cce5e02ec62\transformed\viewbinding-8.4.0\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.material:material:1.10.0] C:\Users\user\.gradle\caches\transforms-4\6bbf120e26d92c9e3ef7d7144f66a117\transformed\material-1.10.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\user\.gradle\caches\transforms-4\8798ba3f913e941b9fcf2175a1c9ef94\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
@@ -120,8 +120,8 @@ ADDED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml
 	android:name
 		ADDED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:7:22-78
 application
-ADDED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:9:5-60:19
-INJECTED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:9:5-60:19
+ADDED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:9:5-65:19
+INJECTED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:9:5-65:19
 MERGED from [com.google.android.material:material:1.10.0] C:\Users\user\.gradle\caches\transforms-4\6bbf120e26d92c9e3ef7d7144f66a117\transformed\material-1.10.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.10.0] C:\Users\user\.gradle\caches\transforms-4\6bbf120e26d92c9e3ef7d7144f66a117\transformed\material-1.10.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\user\.gradle\caches\transforms-4\8798ba3f913e941b9fcf2175a1c9ef94\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -250,6 +250,14 @@ ADDED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml
 		ADDED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:58:13-53
 	android:name
 		ADDED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:56:13-48
+activity#com.example.bsu_contest.AddReportActivity
+ADDED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:60:9-64:20
+	android:exported
+		ADDED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:62:13-36
+	android:theme
+		ADDED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:63:13-53
+	android:name
+		ADDED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml:61:13-46
 uses-sdk
 INJECTED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\AndroidStudioProjects\BSU_Contest\app\src\main\AndroidManifest.xml

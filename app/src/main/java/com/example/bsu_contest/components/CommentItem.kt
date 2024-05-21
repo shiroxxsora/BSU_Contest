@@ -44,8 +44,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Date
-import java.util.Random
-import kotlin.math.abs
 
 @Composable
 fun CommentItem(
@@ -263,7 +261,7 @@ fun CommentItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    /* Время создания заявки, зачеркиваем и пишем ниже новое, если редактировали */
+                    /* Время создания коммента, зачеркиваем и пишем ниже новое, если редактировали */
                     if(comment.created_at == comment.updated_at){
                         Text(
                             modifier = Modifier

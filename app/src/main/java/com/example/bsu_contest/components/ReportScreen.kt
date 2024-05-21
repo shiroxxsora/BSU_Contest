@@ -136,7 +136,7 @@ fun ReportScreen(
 
                     /* Когда добавил? */
                     Text(
-                        text = "Создано: " + report.report_type.created_at.toLocaleString(),
+                        text = "Создано: " + report.created_at.toLocaleString(),
                         fontSize = 14.sp,
                         color = BlueBsu
                     )
@@ -169,7 +169,7 @@ fun ReportScreen(
                 *  Просто картинка с картой, если кликнуть переходим на экран с функционирующей картой
                 * */
                 val url = "https://static-maps.yandex.ru/v1?lang=ru_RU&ll=${report.longitude},${report.latitude}&size=400,400&z=17&pt=${report.longitude},${report.latitude},pm2orgl&apikey=86aef359-e444-4e5b-a9e0-4178cce4d897"
-                println(url)
+
                 AsyncImage(
                     modifier = Modifier
                         .width(400.dp)
@@ -232,6 +232,7 @@ fun ReportScreen(
                         Row(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
+
                             /* Чек бокс чтобы проверить приватный коммент или нет */
                             Checkbox(
                                 colors = CheckboxDefaults.colors(

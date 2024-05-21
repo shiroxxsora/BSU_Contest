@@ -20,7 +20,13 @@ interface MainApi {
 
     @Headers("Content-Type: application/json")
     @PUT("reports/add")
-    suspend fun addReport(@Header("Authorization") token: String): ReportData
+    suspend fun addReport(@Header("Authorization") token: String, @Body report:SendingReport): ReportData
+    @GET("reports/delete/{id}}")
+    suspend fun deleteReportById(@Header("Authorization") token: String, @Path("id") id: Int)
+
+    @Headers("Content-Type: application/json")
+    @PUT("reports/edit")
+    suspend fun editReport(@Header("Authorization") token: String, @Body report:EditingReport)
 
     @GET("comments/{id}")
     suspend fun getPublicCommentsByReportId(@Path("id") id: Int): CommentDataList
