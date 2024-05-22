@@ -41,7 +41,7 @@ class LKActivity : ComponentActivity() {
         }
 
         val team = Team(
-            team_name = "Команда Павла",
+            team_name = "Карточка команды",
             team_member1_name = "Иванов Павел Павлович",
             team_member2_name = "Ся Дмитрий Цзинчэнович",
             team_member3_name = "Батомункуев Тензин-Ширап Арсаланович",

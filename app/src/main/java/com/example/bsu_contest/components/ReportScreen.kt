@@ -6,8 +6,10 @@ import android.content.SharedPreferences
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,6 +33,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -96,6 +100,7 @@ fun ReportScreen(
                 ,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
                 /* Картинка из заявки с использованием
                 *  библиотки io.coil-kt:coil-compose:2.6.0 для AsyncImage */
                 AsyncImage(
@@ -104,66 +109,92 @@ fun ReportScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(300.dp)
-                        .padding(5.dp)
-                        .background(color = Color(0x22000000)),
+                        .padding(5.dp),
                     contentScale = ContentScale.Crop,
 
                     /* Подставляет изображение, если возвращается какая-нибудь ошибка по ссылке в model */
                     error = painterResource(id = R.drawable.ic_noimage)
                 )
 
+                Spacer(modifier = Modifier.height(20.dp))
 
-                /* Заголовок */
-                Text(
+                Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp, vertical = 10.dp),
-                    text = report.title,
-                    fontSize = 28.sp,
-                    color = BlueBsu
-                )
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 10.dp)
-                ) {
+                        .fillMaxWidth(.95f)
+                        .background(color = BlueBsu),
+                    horizontalArrangement = Arrangement.Center
+                ){
+                    Box(modifier = Modifier
+                        .fillMaxWidth(.98f)
+                        .background(color = Color.White)
+                        .padding(vertical = 10.dp),
+                        contentAlignment = Alignment.Center
+                    ){
 
-                    /* Кто добавил? */
-                    Text(
-                        text = "Добавил пользователь: " + report.author.user_name,
-                        fontSize = 14.sp,
-                        color = BlueBsu)
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 10.dp)
+                        ) {
 
-                    /* Когда добавил? */
-                    Text(
-                        text = "Создано: " + report.created_at.toLocaleString(),
-                        fontSize = 14.sp,
-                        color = BlueBsu
-                    )
+                            /* Заголовок */
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                                text = report.title,
+                                fontSize = 28.sp,
+                                color = BlueBsu
+                            )
 
-                    /* Яма/Мусор */
-                    Text(
-                        text = "Тип заявки: " + report.report_type.title,
-                        fontSize = 14.sp,
-                        color = BlueBsu
-                    )
+                            /* Кто добавил? */
+                            Text(
+                                text = "Добавил пользователь: " + report.author.user_name,
+                                fontSize = 16.sp,
+                                color = BlueBsu)
 
-                    /* Где? */
-                    Text(
-                        text = "Местоположение: " + report.location,
-                        fontSize = 14.sp,
-                        color = BlueBsu
-                    )
+                            Spacer(modifier = Modifier.height(4.dp))
 
-                    /* Что еще написал? */
-                    Text(
-                        modifier = Modifier
-                            .padding(vertical = 20.dp),
-                        text = "Дополнительно:\n" + report.content,
-                        fontSize = 14.sp,
-                        color = BlueBsu)
+                            /* Когда добавил? */
+                            Text(
+                                text = "Создано: " + report.created_at.toLocaleString(),
+                                fontSize = 16.sp,
+                                color = BlueBsu
+                            )
+
+                            Spacer(modifier = Modifier.height(4.dp))
+
+                            /* Яма/Мусор */
+                            Text(
+                                text = "Тип заявки: " + report.report_type.title,
+                                fontSize = 16.sp,
+                                color = BlueBsu
+                            )
+
+                            Spacer(modifier = Modifier.height(4.dp))
+
+                            /* Где? */
+                            Text(
+                                text = "Местоположение: " + report.location,
+                                fontSize = 16.sp,
+                                color = BlueBsu
+                            )
+
+                            Spacer(modifier = Modifier.height(4.dp))
+
+                            /* Что еще написал? */
+                            Text(
+                                modifier = Modifier
+                                    .padding(vertical = 20.dp),
+                                text = "Дополнительно:\n" + report.content,
+                                fontSize = 16.sp,
+                                color = BlueBsu)
+                        }
+                    }
+
                 }
 
+                Spacer(modifier = Modifier.height(20.dp))
 
                 /* Было вынесено для отладки
                 *  Просто картинка с картой, если кликнуть переходим на экран с функционирующей картой
@@ -172,18 +203,27 @@ fun ReportScreen(
 
                 AsyncImage(
                     modifier = Modifier
-                        .width(400.dp)
-                        .height(400.dp)
+                        .width(300.dp)
+                        .height(300.dp)
                         .clickable {
                             val intent = Intent(context, ReportMapActivity::class.java)
                             intent.putExtra("latitude", report.latitude)
                             intent.putExtra("longitude", report.longitude)
                             startActivity(context, intent, null)
+                        }
+                        .graphicsLayer {
+                            shadowElevation = 6.dp.toPx()
+                            shape = RectangleShape
+                            clip = true
+                            ambientShadowColor = Color.Black
+                            spotShadowColor = Color.Black
                         },
                     model = url,
                     contentDescription = "Map image",
                     error = painterResource(id = R.drawable.ic_noimage)
                 )
+
+                Spacer(modifier = Modifier.height(20.dp))
             }
         }
 

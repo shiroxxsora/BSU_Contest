@@ -26,6 +26,8 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
@@ -104,7 +106,14 @@ fun ReportItem(
                             modifier = Modifier
                                 .fillMaxWidth(.33f)
                                 .height(100.dp)
-                                .padding(end = 10.dp),
+                                .padding(end = 10.dp)
+                                .graphicsLayer {
+                                    shadowElevation = 6.dp.toPx()
+                                    shape = RectangleShape
+                                    clip = true
+                                    ambientShadowColor = Color.Black
+                                    spotShadowColor = Color.Black
+                                },
                             contentScale = ContentScale.Crop,
 
                             /* Подставляет изображение, если возвращается какая-нибудь ошибка по ссылке в model */
